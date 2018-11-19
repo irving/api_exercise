@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :board do
-    name { "MyString" }
+  factory :column do
+    name { 'MyString' }
+    board
   end
 end
