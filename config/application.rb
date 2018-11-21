@@ -36,5 +36,7 @@ module Exercise
       g.test_framework :rspec
       g.fixture_replacement :factory_bot, :dir => "spec/factories"
     end
+
+    config.time_zone = "Eastern Time (US & Canada)"
   end
 end
