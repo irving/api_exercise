@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'V1::BoardsController GET index', type: :request do
+describe 'V1::BoardsController GET show', type: :request do
   let(:board) { create :board }
   let(:columns) { create_list :column, 2, board: board }
 
