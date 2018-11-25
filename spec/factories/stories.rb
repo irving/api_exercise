@@ -4,5 +4,6 @@ FactoryBot.define do
     description { "the description" }
     column
     due_date { Time.zone.now + 10.days }
+    status { "open" }
   end
 end

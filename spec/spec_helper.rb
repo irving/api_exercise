@@ -94,3 +94,7 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 end
+
+def json_response
+  @json_response ||= JSON.parse(response.body, object_class: HashWithIndifferentAccess)
+end

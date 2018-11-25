@@ -4,5 +4,5 @@
 class Board < ApplicationRecord
   validates :name, presence: true, uniqueness: true
 
-  has_many :columns
+  has_many :columns, dependent: :delete_all
 end

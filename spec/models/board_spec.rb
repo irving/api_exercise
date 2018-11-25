@@ -10,8 +10,8 @@ RSpec.describe Board, type: :model do
     it { expect(described_class.new(valid_params)).to be_valid }
 
     it 'fails on duplicate name' do
-      create :board
-      expect(build(:board)).not_to be_valid
+      create :board, name: 'name'
+      expect(build(:board, name: 'name')).not_to be_valid
     end
   end
 end

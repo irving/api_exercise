@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 2018_11_19_004821) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["column_id"], name: "index_stories_on_column_id"
+    t.index ["status"], name: "index_stories_on_status"
   end
 
 end

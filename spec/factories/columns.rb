@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
+  sequence :name do |n|
+    "thing_#{n}"
+  end
+
   factory :column do
-    name { 'MyString' }
+    name
     board
   end
 end

@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :board do
-    name { "MyString" }
+    name
   end
 end
