@@ -8,6 +8,8 @@ describe 'V1::ColumnController GET index', type: :request do
 
   before do
     columns
+    # add one from a different board to check correct scoping
+    create :column
     get(v1_board_columns_path(board.id))
   end
 

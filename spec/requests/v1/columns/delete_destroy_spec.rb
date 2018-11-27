@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'V1::ColumnssController DELETE destroy', type: :request do
+describe 'V1::ColumnsController DELETE destroy', type: :request do
   let(:board) { create :board }
   let(:column) { create :column, board: board }
 

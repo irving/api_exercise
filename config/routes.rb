@@ -4,5 +4,9 @@ Rails.application.routes.draw do
     resources :boards do
       resources :columns
     end
+
+    resources :columns do
+      resources :stories
+    end
   end
 end

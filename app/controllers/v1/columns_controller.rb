@@ -7,7 +7,7 @@ module V1
 
     # GET /v1/boards/:board_id/columns
     def index
-      @columns = Column.all
+      @columns = Column.where board_id: @board.id
 
       render json: @columns
     end

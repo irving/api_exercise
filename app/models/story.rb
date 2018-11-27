@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# A story is single item in a column, which belongs to a board
+# A story is a single item in a column, which belongs to a board
 class Story < ApplicationRecord
   belongs_to :column
 
