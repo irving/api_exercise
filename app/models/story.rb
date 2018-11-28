@@ -11,6 +11,7 @@ class Story < ApplicationRecord
 
   # Chain with qualifiers for column and board.
   scope :overdue, -> { self.open.where('due_date < ?', Time.zone.now.to_date) }
+  scope :by_status, ->(statuses) { where status: statuses }
 
   private
 

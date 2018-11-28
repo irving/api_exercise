@@ -19,6 +19,9 @@ RSpec.describe Story, type: :model do
       story.due_date = Time.zone.now - 2.days
       expect(story).not_to be_valid
     end
+    it 'rejects invalid status' do
+      expect { story.status = 'bad status' }.to raise_error(ArgumentError)
+    end
   end
   context 'late' do
     let(:column) { create(:column) }
@@ -39,6 +42,34 @@ RSpec.describe Story, type: :model do
     it 'returns late stories' do
       Timecop.travel(base_due_date + 10.days) do
         expect(described_class.overdue).to eq(stories)
+      end
+    end
+  end
+  context 'filters' do
+    context 'by status' do
+      let(:column) { create :column }
+      let(:target_status) { 'open' }
+
+      before do
+        described_class.statuses.keys.each do |status|
+          create :story, status: status, column: column
+        end
+      end
+      context 'by one status' do
+        let(:stories) { described_class.by_status(target_status) }
+
+        it { expect(stories.count).to eq(1) }
+        it { expect(stories.first.status).to eq(target_status) }
+      end
+      context 'by multiple statuses' do
+        let(:statuses) { %w[open done] }
+        let(:stories) { described_class.by_status(statuses) }
+        let(:returned_statuses) { stories.map(&:status) }
+
+        it { expect(stories.count).to eq(statuses.size) }
+        it 'matched the correct statuses' do
+          expect(returned_statuses).to eq(statuses)
+        end
       end
     end
   end
