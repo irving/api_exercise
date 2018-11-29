@@ -24,6 +24,8 @@ RSpec.describe Story, type: :model do
     end
   end
   context 'scopes' do
+    let(:column) { create :column }
+
     context 'late' do
       let(:base_due_date) { Time.now + 1.day }
       let(:stories) do
@@ -46,7 +48,6 @@ RSpec.describe Story, type: :model do
       end
     end
     context 'by status' do
-      let(:column) { create :column }
       let(:target_status) { 'open' }
 
       before do
@@ -77,6 +78,35 @@ RSpec.describe Story, type: :model do
 
         it { expect(stories).not_to include(other_story) }
         it { expect(stories.map(&:column_id).uniq.first).to eq(column.id) }
+      end
+
+      context 'by_date' do
+        let(:target_date1) { (Time.zone.now + 3.days) }
+        let(:by_date) { described_class.by_date(target_date1) }
+
+        # update due dates on the existing stories so they are all different.
+        before do
+          Timecop.freeze Time.zone.now
+          days = 3
+          described_class.all.each do |story|
+            story.update_attribute :due_date, (Time.zone.now + days.days)
+            days += 1
+          end
+        end
+        after { Timecop.return }
+
+        context 'with one date' do
+          it { expect(by_date.size).to eq(1) }
+          it { expect(by_date[0].due_date.to_date).to eq(target_date1.to_date) }
+        end
+        context 'with multiple dates' do
+          let(:target_date2) { (Time.zone.now + 4.days) }
+          let(:targets) { [target_date1.to_date, target_date2.to_date] }
+          let(:by_dates) { described_class.by_dates(targets) }
+
+          it { expect(by_dates.size).to eq(2) }
+          it { expect(by_dates.map(&:due_date).map(&:to_date)).to eq(targets) }
+        end
       end
     end
   end
