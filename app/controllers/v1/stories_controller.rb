@@ -44,6 +44,12 @@ module V1
       @story.destroy
     end
 
+    def find_by_attributes
+      find_scope, data = find_date_params
+      stories = Story.send(find_scope, data)
+      render json: { stories: stories }
+    end
+
     private
 
     # Use callbacks to share common setup or constraints between actions.
@@ -53,11 +59,21 @@ module V1
 
     # Only allow a trusted parameter "white list" through.
     def story_params
-      params.require(:story).permit(:name, :description, :due_date, :status)
+      params.require(:story)
+            .permit(:name, :description, :due_date, :status, due_dates: [])
     end
 
     def set_story
       @story = Story.find(params[:id])
+    end
+
+    # return prepped date or dates and correct scope
+    def find_date_params
+      if story_params.key?(:due_dates)
+        [:by_dates, story_params[:due_dates].map(&:to_date)]
+      else
+        [:by_date, story_params[:due_date].to_date]
+      end
     end
   end
 end

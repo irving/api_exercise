@@ -6,7 +6,9 @@ Rails.application.routes.draw do
     end
 
     resources :columns do
-      resources :stories
+      resources :stories do
+        get :find_by_attributes, on: :collection
+      end
     end
   end
 end
