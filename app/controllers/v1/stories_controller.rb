@@ -45,9 +45,11 @@ module V1
     end
 
     def find_by_attributes
-      find_scope, data = find_date_params
-      stories = Story.send(find_scope, data)
-      render json: { stories: stories }
+      date_list = find_dates_list
+      stories = date_list.empty? ? [] : Story.by_dates(date_list)
+      status_list = find_status_list
+      stories << Story.by_status(status_list)
+      render json: { stories: stories.flatten }
     end
 
     private
@@ -60,19 +62,39 @@ module V1
     # Only allow a trusted parameter "white list" through.
     def story_params
       params.require(:story)
-            .permit(:name, :description, :due_date, :status, due_dates: [])
+            .permit(:name,
+                    :description,
+                    :due_date,
+                    :status,
+                    due_dates: [],
+                    statuses: [])
     end
 
     def set_story
       @story = Story.find(params[:id])
     end
 
-    # return prepped date or dates and correct scope
-    def find_date_params
-      if story_params.key?(:due_dates)
-        [:by_dates, story_params[:due_dates].map(&:to_date)]
+    # return date or dates prepped for search
+    def find_dates_list
+      dates = if story_params.key?(:due_date)
+                [story_params[:due_date]]
+              elsif story_params.key?(:due_dates)
+                story_params[:due_dates]
+              else
+                []
+              end
+
+      dates.map(&:to_date)
+    end
+
+    # return status or statuses for search
+    def find_status_list
+      if story_params.key?(:status)
+        [story_params[:status]]
+      elsif story_params[:statuses]
+        story_params[:statuses]
       else
-        [:by_date, story_params[:due_date].to_date]
+        []
       end
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_19_004821) do
+ActiveRecord::Schema.define(version: 2018_12_01_013637) do
 
   create_table "boards", force: :cascade do |t|
     t.string "name"
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 2018_11_19_004821) do
     t.string "name"
     t.text "description"
     t.integer "column_id"
-    t.integer "status"
+    t.integer "status", default: 0
     t.datetime "due_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

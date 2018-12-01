@@ -45,7 +45,7 @@ module V1
 
     # Use callbacks to share common setup or constraints between actions.
     def set_board
-      @board = Board.find(params[:id])
+      @board = Board.includes(:columns).find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.

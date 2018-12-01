@@ -7,7 +7,7 @@ module V1
 
     # GET /v1/boards/:board_id/columns
     def index
-      @columns = Column.where board_id: @board.id
+      @columns = Column.where(board_id: @board.id).includes(:stories)
 
       render json: @columns
     end
@@ -48,7 +48,7 @@ module V1
 
     # Use callbacks to share common setup or constraints between actions.
     def set_column
-      @column = Column.find(params[:id])
+      @column = Column.includes(:stories).find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.
